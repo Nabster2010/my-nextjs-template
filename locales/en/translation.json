@@ -1,0 +1,14 @@
+{
+  "nav": {
+    "brand": "Brand",
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "services": "Services",
+    "pricing": "Pricing"
+  },
+  "common": {
+    "title": "My English Web Site",
+    "description": "This is my English Web Site"
+  }
+}
