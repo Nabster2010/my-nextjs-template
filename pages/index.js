@@ -1,14 +1,11 @@
 import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import Hero from "../components/Hero";
 import { useTranslation } from "../hooks/useTranslation";
-import styles from "../styles/Home.module.css";
 
 export default function Home() {
-  const { asPath, locales } = useRouter();
   const { translation: t } = useTranslation();
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>{t.common.title}</title>
         <meta
@@ -17,17 +14,28 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <h1>hello world</h1>
-        <nav>
-          {locales.map((l, i) => (
-            <div key={i}>
-              <Link href={asPath} locale={l}>
-                {l}
-              </Link>
-            </div>
-          ))}
-        </nav>
+      <main className="w-full">
+        <Hero />
+        <div id="test" className="bg-red-200 text-lg font-semibold leading-8">
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error,
+            deleniti quaerat. Magnam, quam, cumque facere dolorem, voluptate
+            labore amet beatae sapiente reprehenderit officia repellendus
+            accusantium nobis reiciendis repudiandae sunt assumenda! Mollitia
+            exercitationem suscipit magnam repellat officiis, quibusdam
+            provident nesciunt quia? Lorem ipsum dolor, sit amet consectetur
+            adipisicing elit. Error, deleniti quaerat. Magnam, quam, cumque
+            facere dolorem, voluptate labore amet beatae sapiente reprehenderit
+            officia repellendus accusantium nobis reiciendis repudiandae sunt
+            assumenda! Mollitia exercitationem suscipit magnam repellat
+            officiis, quibusdam provident nesciunt quia? Lorem ipsum dolor, sit
+            amet consectetur adipisicing elit. Error, deleniti quaerat. Magnam,
+            quam, cumque facere dolorem, voluptate labore amet beatae sapiente
+            reprehenderit officia repellendus accusantium nobis reiciendis
+            repudiandae sunt assumenda! Mollitia exercitationem suscipit magnam
+            repellat officiis, quibusdam provident nesciunt quia?
+          </p>
+        </div>
       </main>
     </div>
   );

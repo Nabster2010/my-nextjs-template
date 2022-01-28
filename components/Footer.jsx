@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-gray-300 dark:bg-gray-800 dark:text-white pt-8 pb-6">
+    <footer className="relative bg-gray-100 dark:bg-gray-800 dark:text-white pt-8 pb-6">
       <div
         className="bottom-auto top-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden -mt-20"
         style={{ height: "80px" }}
@@ -17,7 +17,7 @@ const Footer = () => {
           y="0"
         >
           <polygon
-            className="text-gray-300 dark:text-gray-500 fill-current"
+            className="text-gray-100 dark:text-gray-800 fill-current"
             points="2560 0 2560 100 0 100"
           ></polygon>
         </svg>

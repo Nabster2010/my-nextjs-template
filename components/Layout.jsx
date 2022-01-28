@@ -1,12 +1,11 @@
-import { useTheme } from "next-themes";
 import Footer from "./Footer";
 import Header from "./Header";
 
 const Layout = ({ children }) => {
   return (
-    <div className="font-roboto">
+    <div className="font-roboto w-full flex flex-col min-h-screen">
       <Header />
-      {children}
+      <main className="">{children}</main>
       <Footer />
     </div>
   );
