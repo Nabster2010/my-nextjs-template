@@ -2,44 +2,27 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
+import useNavScroll from "../hooks/useNavScroll";
 import { useTranslation } from "../hooks/useTranslation";
 import ArFlag from "../public/images/ar.svg";
 import EnFlag from "../public/images/en.svg";
 
 const Header = ({}) => {
-  const [prevScrollPos, setPrevScrollPos] = useState(0);
-  const [navVisiblity, setNavVisiblity] = useState(true);
-  const [currentScrollPos, setCurrentScrollPos] = useState(0);
-  const handleScroll = useCallback(() => {
-    setCurrentScrollPos(window.scrollY);
-    setNavVisiblity(
-      prevScrollPos > currentScrollPos || currentScrollPos === prevScrollPos
-    );
-    setPrevScrollPos(currentScrollPos);
-  }, [currentScrollPos, prevScrollPos]);
-  useEffect(() => {
-    if (window) {
-      window.addEventListener("scroll", handleScroll);
-    }
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [currentScrollPos, prevScrollPos, handleScroll]);
   const { theme, setTheme } = useTheme();
+  const { locale, asPath } = useRouter();
   const { translation: t } = useTranslation();
-  const router = useRouter();
-  const { locale, asPath } = router;
-  const [openMenuMobile, setOpenMenuMobile] = useState(false);
-  const openMenuMobileHandler = () => {
-    setOpenMenuMobile(!openMenuMobile);
+  const { navVisiblity } = useNavScroll();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const mobileMenuOpenHandler = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
 
   return (
-    <div className="h-[60px]">
+    <div className="h-[60px] bg-transparent">
       <nav
         className={`transition-transform duration-500 ease-linear  transform  fixed top-0 left-0 right-0 z-50 font-cairo bg-gray-100 border-gray-200 px-4 md:px-8 sm:px-4 py-2.5  dark:bg-gray-800 ${
           navVisiblity ? "" : "-translate-y-[60px]"
@@ -71,10 +54,10 @@ const Header = ({}) => {
             </span>
           </a>
           <button
-            onClick={openMenuMobileHandler}
+            onClick={mobileMenuOpenHandler}
             data-collapse-toggle="mobile-menu"
             type="button"
-            className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none  dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 "
+            className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden  focus:outline-none  dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 "
             aria-controls="mobile-menu-2"
             aria-expanded="false"
           >
@@ -82,24 +65,24 @@ const Header = ({}) => {
             <div className="flex flex-col gap-1 justify-center items-center  ">
               <span
                 className={`h-[2px] w-5 bg-gray-400 rounded transition duration-500 transform ${
-                  openMenuMobile && "rotate-[225deg] translate-y-1 "
+                  mobileMenuOpen && "rotate-[225deg] translate-y-[6px]  "
                 } `}
               ></span>
               <span
                 className={`h-[2px] w-5 bg-gray-400 transition duration-700 rounded ${
-                  openMenuMobile && "opacity-0"
+                  mobileMenuOpen && "opacity-0"
                 }`}
               ></span>
               <span
                 className={`h-[2px] w-5 bg-gray-400 transition duration-500 rounded transform ${
-                  openMenuMobile && "-rotate-[225deg] -translate-y-2  "
+                  mobileMenuOpen && "-rotate-[225deg] -translate-y-[6px] "
                 }`}
               ></span>
             </div>
           </button>
           <div
             className={`${
-              openMenuMobile ? "visible" : "hidden"
+              mobileMenuOpen ? "visible" : "hidden"
             } w-full md:block md:w-auto`}
             id="mobile-menu"
           >
@@ -107,7 +90,7 @@ const Header = ({}) => {
               <li>
                 <a
                   href="#"
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b  hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 ml-8 text-gray-700 border-b md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white hover:bg-blue-700 hover:text-white dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                   aria-current="page"
                 >
                   {t.nav.home}
@@ -116,7 +99,7 @@ const Header = ({}) => {
               <li>
                 <a
                   href="#test"
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b  hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-gray-700 border-b   md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white hover:bg-blue-700  hover:text-white dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   {t.nav.about}
                 </a>
@@ -124,7 +107,7 @@ const Header = ({}) => {
               <li>
                 <a
                   href="#"
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b  hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-gray-700 border-b   md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white hover:bg-blue-700 hover:text-white dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   {t.nav.services}
                 </a>
@@ -132,7 +115,7 @@ const Header = ({}) => {
               <li>
                 <a
                   href="#"
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b  hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-gray-700 border-b   md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white hover:bg-blue-700 hover:text-white dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   {t.nav.pricing}
                 </a>
@@ -140,7 +123,7 @@ const Header = ({}) => {
               <li>
                 <a
                   href="#"
-                  className="block py-2 pr-4 pl-3 text-gray-700 border-b  hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 pr-4 pl-3 text-gray-700 border-b   md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white hover:bg-blue-700 hover:text-white dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   {t.nav.contact}
                 </a>
@@ -148,13 +131,13 @@ const Header = ({}) => {
               <li className="cursor-pointer">
                 {locale === "ar" ? (
                   <Link href={asPath} locale="en-US" passHref>
-                    <div className="block py-1 pr-4 pl-3 text-gray-700 border-b border-gray-200 hover:bg-gray-50 md:hover:bg-transparent md:border-0  md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                    <div className="block py-1 pr-4 pl-3 text-gray-700 border-b border-gray-200  md:hover:bg-transparent md:border-0  md:p-0 dark:text-gray-400 md:dark:hover:text-white hover:bg-blue-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
                       <Image src={EnFlag} width={30} height={30} alt="flag" />
                     </div>
                   </Link>
                 ) : (
                   <Link href={asPath} locale="ar" passHref>
-                    <div className="block py-1 pr-4 pl-3 text-gray-700 border-b border-gray-200 hover:bg-gray-50 md:hover:bg-transparent md:border-0  md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                    <div className="block py-1 pr-4 pl-3 text-gray-700 border-b border-gray-200  md:hover:bg-transparent md:border-0  md:p-0 dark:text-gray-400 md:dark:hover:text-white hover:bg-blue-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
                       <Image src={ArFlag} width={30} height={30} alt="flag" />
                     </div>
                   </Link>
@@ -164,13 +147,13 @@ const Header = ({}) => {
                 <button
                   onClick={toggleTheme}
                   type="button"
-                  className="transition-all block w-full md:w-auto py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:opacity-70 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  className="transition-all block w-full md:w-auto py-2 pr-4 pl-3 text-gray-700 border-b border-gray-200  md:hover:bg-transparent md:border-0 md:hover:opacity-70 md:p-0 dark:text-gray-400 md:dark:hover:text-white hover:bg-blue-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   {theme === "light" ? (
                     <svg
                       id="theme-toggle-dark-icon"
-                      className="w-6 h-6 "
-                      fill="currentColor"
+                      className="w-6 h-6 border rounded-full bg-gradient-to-tr from-blue-50 to-blue-300 via-blue-100 shadow-inner"
+                      fill="#76A9FA"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
                     >
@@ -178,7 +161,7 @@ const Header = ({}) => {
                     </svg>
                   ) : (
                     <svg
-                      className="w-6 h-6"
+                      className="w-6 h-6 "
                       fill="rgb(234 179 8)"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
